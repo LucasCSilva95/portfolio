@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Saiani | Full Stack Software Developer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131c2e',
+                        cardBorder: '#1e293b',
+                        accentCyan: '#06b6d4',
+                        accentEmerald: '#10b981',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Styles & Print Optimization -->
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        .glow-cyan {
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.15);
+        }
+        .glow-emerald {
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+        }
+        @media print {
+            header, footer, #contact, .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .bg-cardBg, .bg-darkBg {
+                background: white !important;
+                color: black !important;
+                border: 1px solid #ccc !important;
+            }
+            .text-slate-400, .text-slate-500 {
+                color: #444 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-darkBg text-slate-800 dark:text-slate-100 font-sans transition-colors duration-300 min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-white">
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-darkBg/80 backdrop-blur-md border-b border-slate-200 dark:border-cardBorder transition-colors duration-300 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#hero" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-500 flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:scale-105 transition-transform">
+                    LS
+                </div>
+                <div>
+                    <span class="font-bold text-lg tracking-tight block">Lucas Saiani</span>
+                    <span data-i18n="heroSubRole" class="text-xs text-cyan-600 dark:text-cyan-400 font-medium">Full Stack Software Developer</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#about" data-i18n="navAbout" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">About</a>
+                <a href="#skills" data-i18n="navSkills" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Skills</a>
+                <a href="#experience" data-i18n="navExperience" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Experience</a>
+                <a href="#education" data-i18n="navEducation" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Education</a>
+                <a href="#languages" data-i18n="navLanguages" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Languages</a>
+                <a href="#contact" data-i18n="navContact" class="hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors">Contact</a>
+            </nav>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-3">
+                <!-- Language Switcher Button -->
+                <button id="langToggle" onclick="toggleLanguage()" class="px-3 py-2 rounded-xl bg-slate-100 dark:bg-cardBg border border-slate-200 dark:border-cardBorder text-slate-700 dark:text-slate-200 hover:text-cyan-500 dark:hover:text-cyan-400 transition-all text-xs font-bold flex items-center space-x-2 shadow-sm">
+                    <span id="langFlag">🇧🇷</span>
+                    <span id="langText">PT-BR</span>
+                </button>
+
+                <!-- Theme Toggle Button -->
+                <button id="themeToggle" class="p-2.5 rounded-xl bg-slate-100 dark:bg-cardBg border border-slate-200 dark:border-cardBorder text-slate-600 dark:text-slate-300 hover:text-cyan-500 dark:hover:text-cyan-400 transition-all shadow-sm" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:inline"></i>
+                </button>
+
+                <!-- Resume Download Button -->
+                <button onclick="downloadResume()" class="hidden sm:inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-white font-medium text-sm shadow-lg shadow-cyan-500/20 transition-all transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                    <span data-i18n="btnResume">Resume</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden p-2.5 rounded-xl bg-slate-100 dark:bg-cardBg border border-slate-200 dark:border-cardBorder text-slate-600 dark:text-slate-300">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-cardBg border-b border-slate-200 dark:border-cardBorder px-6 py-4 space-y-3">
+            <a href="#about" data-i18n="navAbout" class="block py-2 text-sm font-medium hover:text-cyan-500 transition-colors mobile-link">About</a>
+            <a href="#skills" data-i18n="navSkills" class="block py-2 text-sm font-medium hover:text-cyan-500 transition-colors mobile-link">Skills</a>
+            <a href="#experience" data-i18n="navExperience" class="block py-2 text-sm font-medium hover:text-cyan-500 transition-colors mobile-link">Experience</a>
+            <a href="#education" data-i18n="navEducation" class="block py-2 text-sm font-medium hover:text-cyan-500 transition-colors mobile-link">Education</a>
+            <a href="#languages" data-i18n="navLanguages" class="block py-2 text-sm font-medium hover:text-cyan-500 transition-colors mobile-link">Languages</a>
+            <a href="#contact" data-i18n="navContact" class="block py-2 text-sm font-medium hover:text-cyan-500 transition-colors mobile-link">Contact</a>
+            <button onclick="downloadResume()" class="w-full mt-2 py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-white font-medium text-sm text-center shadow-md flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-file-arrow-down"></i>
+                <span data-i18n="btnResume">Resume</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-20">
+        <!-- Hero Section -->
+        <section id="hero" class="relative overflow-hidden py-20 lg:py-28 flex items-center">
+            <div class="absolute inset-0 opacity-20 dark:opacity-30 pointer-events-none">
+                <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/30 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/30 rounded-full blur-3xl"></div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-600 dark:text-cyan-400 text-xs font-semibold uppercase tracking-wider">
+                            <span class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></span>
+                            <span data-i18n="heroBadge">Open for Remote, Hybrid & On-site Roles (Part-Time)</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                            <span data-i18n="heroGreeting">Hi, I'm</span> <span class="bg-gradient-to-r from-cyan-400 via-blue-500 to-emerald-400 bg-clip-text text-transparent">Lucas Saiani</span>
+                        </h1>
+                        <p data-i18n="heroTitle" class="text-xl sm:text-2xl font-semibold text-slate-600 dark:text-slate-300">
+                            Full Stack Software Developer
+                        </p>
+                        <p data-i18n="heroBio" class="text-base sm:text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                            Experienced Full Stack Developer with strong expertise in building scalable backend services with C# .NET and modern web interfaces with Angular. Computer Engineer and MBA graduate currently based in Sydney, Australia.
+                        </p>
+                        
+                        <!-- Contact Quick Highlights -->
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs font-medium text-slate-600 dark:text-slate-300">
+                            <span class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-200/50 dark:bg-cardBg border border-slate-300 dark:border-cardBorder">
+                                <i class="fa-solid fa-location-dot text-cyan-500"></i>
+                                <span data-i18n="heroLoc">Sydney, Australia</span>
+                            </span>
+                            <span class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-200/50 dark:bg-cardBg border border-slate-300 dark:border-cardBorder">
+                                <i class="fa-solid fa-passport text-emerald-500"></i>
+                                <span data-i18n="heroVisa">Student Visa (Part-time Work Rights)</span>
+                            </span>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                            <a href="#experience" data-i18n="heroBtnExperience" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-white font-semibold text-sm shadow-xl shadow-cyan-500/25 transition-all transform hover:-translate-y-0.5 flex items-center space-x-2">
+                                <span>View Experience</span>
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                            <a href="#contact" data-i18n="heroBtnContact" class="px-6 py-3.5 rounded-xl bg-white dark:bg-cardBg hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-cardBorder font-semibold text-sm transition-all shadow-sm">
+                                Get in Touch
+                            </a>
+                        </div>
+
+                        <!-- Social & Direct Contact Links -->
+                        <div class="flex items-center justify-center lg:justify-start space-x-4 pt-2 text-slate-500 dark:text-slate-400">
+                            <a href="https://github.com/LucasCSilva95" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-white dark:bg-cardBg border border-slate-200 dark:border-cardBorder hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors shadow-sm" aria-label="GitHub">
+                                <i class="fa-brands fa-github text-xl"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/lucascamargosilva" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-white dark:bg-cardBg border border-slate-200 dark:border-cardBorder hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors shadow-sm" aria-label="LinkedIn">
+                                <i class="fa-brands fa-linkedin text-xl"></i>
+                            </a>
+                            <a href="https://wa.me/61450248330" target="_blank" rel="noopener noreferrer" class="p-3 rounded-xl bg-white dark:bg-cardBg border border-slate-200 dark:border-cardBorder hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors shadow-sm" aria-label="WhatsApp">
+                                <i class="fa-brands fa-whatsapp text-xl"></i>
+                            </a>
+                            <a href="mailto:lucascsilva.dev@gmail.com" class="p-3 rounded-xl bg-white dark:bg-cardBg border border-slate-200 dark:border-cardBorder hover:text-cyan-500 dark:hover:text-cyan-400 transition-colors shadow-sm" aria-label="Email">
+                                <i class="fa-solid fa-envelope text-xl"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Visual Box -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="w-full max-w-md rounded-2xl bg-white dark:bg-cardBg border border-slate-200 dark:border-cardBorder p-6 shadow-2xl relative glow-cyan">
+                            <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-cardBorder">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                                </div>
+                                <span class="text-xs font-mono text-slate-400">lucas_saiani.cs</span>
+                            </div>
+                            <div class="py-6 font-mono text-xs sm:text-sm space-y-3">
+                                <p class="text-slate-400">// Software Developer Profile</p>
+                                <p><span class="text-purple-500 dark:text-purple-400">public class</span> <span class="text-amber-500 dark:text-amber-400">Developer</span></p>
+                                <p class="pl-4"><span class="text-blue-500 dark:text-blue-400">string</span> Name = <span class="text-emerald-500">"Lucas de Camargo Silva Saiani"</span>;</p>
+                                <p class="pl-4"><span class="text-blue-500 dark:text-blue-400">string</span> Location = <span class="text-emerald-500">"Sydney, Australia"</span>;</p>
+                                <p class="pl-4"><span class="text-blue-500 dark:text-blue-400">string</span> Degree = <span class="text-emerald-500">"Computer Engineering (UNAERP)"</span>;</p>
+                                <p class="pl-4"><span class="text-blue-500 dark:text-blue-400">string</span> PostGrad = <span class="text-emerald-500">"MBA Full Stack Developer (IGTI)"</span>;</p>
+                                <p class="pl-4"><span class="text-blue-500 dark:text-blue-400">string[]</span> PrimaryStack = { <span class="text-emerald-500">"C#"</span>, <span class="text-emerald-500">".NET 8"</span>, <span class="text-emerald-500">"Angular"</span>, <span class="text-emerald-500">"SQL"</span> };</p>
+                            </div>
+                            <div class="pt-4 border-t border-slate-200 dark:border-cardBorder flex items-center justify-between text-xs text-slate-500">
+                                <span data-i18n="codeStatus">Status: Available for Opportunities</span>
+                                <span class="text-emerald-500 font-semibold flex items-center"><i class="fa-solid fa-circle text-[8px] mr-1.5 animate-ping"></i>Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20 bg-slate-100/50 dark:bg-[#0f172a]/50 border-y border-slate-200 dark:border-cardBorder">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <h2 data-i18n="aboutHeader" class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">Professional Summary</h2>
+                    <h3 data-i18n="aboutTitle" class="text-3xl sm:text-4xl font-extrabold tracking-tight">Full Stack Expertise & Clean Architecture</h3>
+                    <p data-i18n="aboutSub" class="text-slate-500 dark:text-slate-400 text-base sm:text-lg leading-relaxed">
+                        Computer Engineer and MBA graduate with extensive experience developing full-stack web applications, business logic in C# .NET, interactive Angular interfaces, and optimized database solutions.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Pillar 1 -->
+                    <div class="bg-white dark:bg-cardBorder/40 p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm hover:border-cyan-500/50 transition-all group">
+                        <div class="w-14 h-14 rounded-xl bg-cyan-500/10 text-cyan-500 dark:text-cyan-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-server"></i>
+                        </div>
+                        <h4 data-i18n="aboutPillar1Title" class="text-xl font-bold mb-3">Backend Engineering</h4>
+                        <p data-i18n="aboutPillar1Desc" class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                            Proficient in constructing high-speed RESTful Web APIs, microservices, and Entity Framework ORM data layers in C# .NET.
+                        </p>
+                    </div>
+
+                    <!-- Pillar 2 -->
+                    <div class="bg-white dark:bg-cardBorder/40 p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm hover:border-emerald-500/50 transition-all group">
+                        <div class="w-14 h-14 rounded-xl bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-angular"></i>
+                        </div>
+                        <h4 data-i18n="aboutPillar2Title" class="text-xl font-bold mb-3">Angular Frontend</h4>
+                        <p data-i18n="aboutPillar2Desc" class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                            Designing modular single-page web applications with Angular, TypeScript, RxJS, state management, and modern CSS frameworks.
+                        </p>
+                    </div>
+
+                    <!-- Pillar 3 -->
+                    <div class="bg-white dark:bg-cardBorder/40 p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm hover:border-blue-500/50 transition-all group">
+                        <div class="w-14 h-14 rounded-xl bg-blue-500/10 text-blue-500 dark:text-blue-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <h4 data-i18n="aboutPillar3Title" class="text-xl font-bold mb-3">Computer Engineer & MBA</h4>
+                        <p data-i18n="aboutPillar3Desc" class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                            Strong technical foundation combining rigorous engineering principles with post-graduate specialization in Full Stack Development.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <h2 data-i18n="skillsHeader" class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">Technical Stack</h2>
+                    <h3 data-i18n="skillsTitle" class="text-3xl sm:text-4xl font-extrabold tracking-tight">Core Competencies</h3>
+                    <p data-i18n="skillsSub" class="text-slate-500 dark:text-slate-400 text-base sm:text-lg">
+                        A clean breakdown of technologies, frameworks, databases, and development practices I utilize.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- C# / Backend -->
+                    <div class="bg-white dark:bg-cardBg p-6 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm hover:border-purple-500/40 transition-colors">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="p-3 rounded-xl bg-purple-500/10 text-purple-500 dark:text-purple-400">
+                                <i class="fa-solid fa-code text-xl"></i>
+                            </div>
+                            <h4 data-i18n="skillCatBackend" class="text-lg font-bold">Backend (C# & .NET)</h4>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">C# & .NET Core / .NET 8</span>
+                                <span data-i18n="badgePrimary" class="text-xs px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-500 font-semibold">Primary</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">ASP.NET Core Web API</span>
+                                <span data-i18n="badgeCore" class="text-xs px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-500 font-semibold">Core Stack</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">Entity Framework Core / LINQ</span>
+                                <span data-i18n="badgeCore" class="text-xs px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-500 font-semibold">Core Stack</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">RESTful APIs & Microservices</span>
+                                <span data-i18n="badgeCore" class="text-xs px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-500 font-semibold">Core Stack</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Angular / Frontend -->
+                    <div class="bg-white dark:bg-cardBg p-6 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm hover:border-red-500/40 transition-colors">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="p-3 rounded-xl bg-red-500/10 text-red-500 dark:text-red-400">
+                                <i class="fa-brands fa-angular text-xl"></i>
+                            </div>
+                            <h4 data-i18n="skillCatFrontend" class="text-lg font-bold">Frontend (Angular)</h4>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">Angular Framework</span>
+                                <span data-i18n="badgePrimary" class="text-xs px-2.5 py-1 rounded-md bg-red-500/10 text-red-500 font-semibold">Primary</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">TypeScript & JavaScript</span>
+                                <span data-i18n="badgeCore" class="text-xs px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-500 font-semibold">Core Stack</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">RxJS & Observables</span>
+                                <span data-i18n="badgeCore" class="text-xs px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-500 font-semibold">Core Stack</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">HTML5, CSS3, Tailwind / Bootstrap</span>
+                                <span data-i18n="badgeCore" class="text-xs px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-500 font-semibold">Core Stack</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Database & Tools -->
+                    <div class="bg-white dark:bg-cardBg p-6 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm hover:border-emerald-500/40 transition-colors">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="p-3 rounded-xl bg-emerald-500/10 text-emerald-500 dark:text-emerald-400">
+                                <i class="fa-solid fa-database text-xl"></i>
+                            </div>
+                            <h4 data-i18n="skillCatDatabase" class="text-lg font-bold">Databases & Tools</h4>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-300">
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">SQL Server, PostgreSQL, MySQL</span>
+                                <span data-i18n="badgeCore" class="text-xs px-2.5 py-1 rounded-md bg-cyan-500/10 text-cyan-500 font-semibold">Core Stack</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">Git, GitHub & Azure DevOps</span>
+                                <span data-i18n="badgeDevOps" class="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-500 font-semibold">Tools</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">Docker & CI/CD Pipelines</span>
+                                <span data-i18n="badgeDevOps" class="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-500 font-semibold">Tools</span>
+                            </li>
+                            <li class="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200/60 dark:border-cardBorder">
+                                <span class="font-medium">Agile, Scrum & Unit Testing</span>
+                                <span data-i18n="badgeDevOps" class="text-xs px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-500 font-semibold">Practice</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Work Experience Section -->
+        <section id="experience" class="py-20 bg-slate-100/50 dark:bg-[#0f172a]/50 border-y border-slate-200 dark:border-cardBorder">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <h2 data-i18n="expHeader" class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">Career History</h2>
+                    <h3 data-i18n="expTitle" class="text-3xl sm:text-4xl font-extrabold tracking-tight">Professional Experience</h3>
+                    <p data-i18n="expSub" class="text-slate-500 dark:text-slate-400 text-base sm:text-lg">
+                        Hands-on track record as a software developer analyst and full stack developer across established tech companies.
+                    </p>
+                </div>
+
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <!-- Role 1: Midas -->
+                    <div class="bg-white dark:bg-cardBg p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm relative pl-8 sm:pl-10">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-cyan-500 to-emerald-500 rounded-l-2xl"></div>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                            <div>
+                                <h4 data-i18n="expRole1" class="text-xl font-bold">Mid-Level Developer Analyst (Analista de Desenvolvimento Pl)</h4>
+                                <p class="text-cyan-600 dark:text-cyan-400 font-medium text-sm">Midas • Ribeirão Preto / SP, Brazil</p>
+                            </div>
+                            <span data-i18n="expDate1" class="mt-2 sm:mt-0 text-xs font-semibold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 w-fit">Jun 2024 - Feb 2026</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-300 list-disc list-inside leading-relaxed">
+                            <li data-i18n="expPoint1_1">Developed and maintained scalable RESTful Web APIs using C# .NET Core and Entity Framework.</li>
+                            <li data-i18n="expPoint1_2">Engineered responsive, modular frontend features in Angular, integrated with backend services.</li>
+                            <li data-i18n="expPoint1_3">Optimized database queries and stored procedures in SQL Server/PostgreSQL to enhance performance.</li>
+                            <li data-i18n="expPoint1_4">Participated in Agile/Scrum ceremonies, code reviews, and continuous deployment tasks using Azure DevOps.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Role 2: Grupo Pasquali -->
+                    <div class="bg-white dark:bg-cardBg p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm relative pl-8 sm:pl-10">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-l-2xl"></div>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                            <div>
+                                <h4 data-i18n="expRole2" class="text-xl font-bold">Mid-Level Developer Analyst (Analista de Desenvolvimento Pl)</h4>
+                                <p class="text-blue-600 dark:text-blue-400 font-medium text-sm">Grupo Pasquali • Ribeirão Preto / SP, Brazil</p>
+                            </div>
+                            <span data-i18n="expDate2" class="mt-2 sm:mt-0 text-xs font-semibold px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 w-fit">Jul 2023 - Feb 2024</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-300 list-disc list-inside leading-relaxed">
+                            <li data-i18n="expPoint2_1">Built robust web applications implementing business rules in C# .NET and modern frontend solutions.</li>
+                            <li data-i18n="expPoint2_2">Designed UI components in Angular, leveraging TypeScript and RxJS for smooth user experience.</li>
+                            <li data-i18n="expPoint2_3">Collaborated on database modeling, schema updates, and REST API integration testing.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Role 3: MAGIT IT PARTNER -->
+                    <div class="bg-white dark:bg-cardBg p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm relative pl-8 sm:pl-10">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-purple-500 to-indigo-500 rounded-l-2xl"></div>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                            <div>
+                                <h4 data-i18n="expRole3" class="text-xl font-bold">Full Stack Developer</h4>
+                                <p class="text-purple-600 dark:text-purple-400 font-medium text-sm">MAGIT IT PARTNER • Ribeirão Preto / SP, Brazil</p>
+                            </div>
+                            <span data-i18n="expDate3" class="mt-2 sm:mt-0 text-xs font-semibold px-3 py-1 rounded-full bg-purple-500/10 text-purple-600 dark:text-purple-400 w-fit">Jan 2020 - Jul 2023</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-600 dark:text-slate-300 list-disc list-inside leading-relaxed">
+                            <li data-i18n="expPoint3_1">Delivered full-stack software solutions for client projects, handling backend C# logic and frontend web interfaces.</li>
+                            <li data-i18n="expPoint3_2">Built web services and database integrations, maintaining clean code standards and unit test coverage.</li>
+                            <li data-i18n="expPoint3_3">Worked closely with product owners and developers to deliver custom client features on schedule.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academic Background Section -->
+        <section id="education" class="py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <h2 data-i18n="eduHeader" class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">Education & Qualifications</h2>
+                    <h3 data-i18n="eduTitle" class="text-3xl sm:text-4xl font-extrabold tracking-tight">Academic Degrees</h3>
+                    <p data-i18n="eduSub" class="text-slate-500 dark:text-slate-400 text-base sm:text-lg">
+                        Solid engineering foundation complemented by postgraduate full-stack development specialization.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Education 1: Bachelor -->
+                    <div class="bg-white dark:bg-cardBg p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm relative hover:border-cyan-500/40 transition-colors">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-500 dark:text-cyan-400 flex items-center justify-center text-xl mb-6">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span data-i18n="eduDegreeBadge1" class="text-xs font-semibold px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">Bachelor's Degree</span>
+                        <h4 data-i18n="eduDegree1Title" class="text-xl font-bold mt-3 mb-1">Computer Engineering</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">UNAERP • Concluded 2017</p>
+                        <p data-i18n="eduDegree1Desc" class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Rigorous engineering program covering software architecture, computer systems, algorithms, object-oriented design, and database administration.
+                        </p>
+                    </div>
+
+                    <!-- Education 2: MBA -->
+                    <div class="bg-white dark:bg-cardBg p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm relative hover:border-emerald-500/40 transition-colors">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 flex items-center justify-center text-xl mb-6">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <span data-i18n="eduDegreeBadge2" class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Postgraduate / MBA</span>
+                        <h4 data-i18n="eduDegree2Title" class="text-xl font-bold mt-3 mb-1">MBA Full Stack Developer</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">IGTI • Jan 2022 - Dec 2022</p>
+                        <p data-i18n="eduDegree2Desc" class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Specialized program in full-stack architecture, microservices, cloud applications, modern web frameworks, and DevOps pipelines.
+                        </p>
+                    </div>
+
+                    <!-- Education 3: English Course -->
+                    <div class="bg-white dark:bg-cardBg p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm relative hover:border-blue-500/40 transition-colors">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-500 dark:text-blue-400 flex items-center justify-center text-xl mb-6">
+                            <i class="fa-solid fa-language"></i>
+                        </div>
+                        <span data-i18n="eduDegreeBadge3" class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400">Language Course</span>
+                        <h4 data-i18n="eduDegree3Title" class="text-xl font-bold mt-3 mb-1">General English Program</h4>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mb-4">ELSIS (English Language Schools) • Apr 2026 - Sep 2026</p>
+                        <p data-i18n="eduDegree3Desc" class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                            Completed Upper Intermediate English level in Sydney, Australia, strengthening professional and conversational communication skills.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Languages Section -->
+        <section id="languages" class="py-20 bg-slate-100/50 dark:bg-[#0f172a]/50 border-y border-slate-200 dark:border-cardBorder">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <h2 data-i18n="langHeader" class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">Communication</h2>
+                    <h3 data-i18n="langTitle" class="text-3xl sm:text-4xl font-extrabold tracking-tight">Languages</h3>
+                    <p data-i18n="langSub" class="text-slate-500 dark:text-slate-400 text-base sm:text-lg">
+                        Language proficiency for international and multicultural teamwork.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                    <!-- Portuguese -->
+                    <div class="bg-white dark:bg-cardBg p-6 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-3xl">🇧🇷</span>
+                            <div>
+                                <h4 data-i18n="langPt" class="font-bold text-lg">Portuguese</h4>
+                                <p data-i18n="langPtProf" class="text-xs text-slate-400">Native Speaker</p>
+                            </div>
+                        </div>
+                        <span data-i18n="langPtBadge" class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-semibold">Native</span>
+                    </div>
+
+                    <!-- English -->
+                    <div class="bg-white dark:bg-cardBg p-6 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-3xl">🇦🇺</span>
+                            <div>
+                                <h4 data-i18n="langEn" class="font-bold text-lg">English</h4>
+                                <p data-i18n="langEnProf" class="text-xs text-slate-400">Finished Upper Intermediate (ELSIS)</p>
+                            </div>
+                        </div>
+                        <span data-i18n="langEnBadge" class="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-500 text-xs font-semibold">Upper Intermediate</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 no-print">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <h2 data-i18n="contactHeader" class="text-xs font-bold uppercase tracking-widest text-cyan-600 dark:text-cyan-400">Get In Touch</h2>
+                    <h3 data-i18n="contactTitle" class="text-3xl sm:text-4xl font-extrabold tracking-tight">Let's Connect</h3>
+                    <p data-i18n="contactSub" class="text-slate-500 dark:text-slate-400 text-base sm:text-lg">
+                        Looking for a Full Stack Software Developer in Sydney or for remote projects? Send a message directly!
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-5xl mx-auto">
+                    <!-- Contact Info -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="bg-white dark:bg-cardBg p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm space-y-6">
+                            <h4 data-i18n="contactInfoTitle" class="text-xl font-bold">Contact Details</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-500 dark:text-cyan-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <span data-i18n="contactEmailLabel" class="text-xs text-slate-400 block">Email</span>
+                                        <a href="mailto:lucascsilva.dev@gmail.com" class="text-sm font-semibold hover:text-cyan-500 transition-colors">lucascsilva.dev@gmail.com</a>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-500 dark:text-emerald-400 flex items-center justify-center">
+                                        <i class="fa-brands fa-whatsapp"></i>
+                                    </div>
+                                    <div>
+                                        <span data-i18n="contactPhoneLabel" class="text-xs text-slate-400 block">Phone / WhatsApp</span>
+                                        <a href="https://wa.me/61450248330" target="_blank" class="text-sm font-semibold hover:text-emerald-500 transition-colors">+61 450 248 330</a>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 dark:text-blue-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </div>
+                                    <div>
+                                        <span data-i18n="contactLocLabel" class="text-xs text-slate-400 block">Location</span>
+                                        <span data-i18n="contactLocValue" class="text-sm font-semibold">Sydney, Australia</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-500 dark:text-purple-400 flex items-center justify-center">
+                                        <i class="fa-solid fa-passport"></i>
+                                    </div>
+                                    <div>
+                                        <span data-i18n="contactVisaLabel" class="text-xs text-slate-400 block">Work Rights</span>
+                                        <span data-i18n="contactVisaValue" class="text-sm font-semibold text-emerald-500">Student Visa (Part-Time)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="lg:col-span-7">
+                        <form id="contactForm" onsubmit="handleContactSubmit(event)" class="bg-white dark:bg-cardBg p-8 rounded-2xl border border-slate-200 dark:border-cardBorder shadow-sm space-y-6">
+                            <div id="formMessage" class="hidden p-4 rounded-xl text-sm font-medium"></div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label data-i18n="formLabelName" class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Your Name</label>
+                                    <input type="text" id="name" required class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-cardBorder focus:outline-none focus:border-cyan-500 text-sm transition-colors" placeholder="Name">
+                                </div>
+                                <div class="space-y-2">
+                                    <label data-i18n="formLabelEmail" class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Your Email</label>
+                                    <input type="email" id="email" required class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-cardBorder focus:outline-none focus:border-cyan-500 text-sm transition-colors" placeholder="email@example.com">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label data-i18n="formLabelSubject" class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Subject</label>
+                                <input type="text" id="subject" required class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-cardBorder focus:outline-none focus:border-cyan-500 text-sm transition-colors" placeholder="Job Opportunity / Project Inquiry">
+                            </div>
+                            <div class="space-y-2">
+                                <label data-i18n="formLabelMessage" class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Message</label>
+                                <textarea id="message" rows="4" required class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-cardBorder focus:outline-none focus:border-cyan-500 text-sm transition-colors resize-none" placeholder="Hello Lucas..."></textarea>
+                            </div>
+                            <button type="submit" data-i18n="formBtnSend" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 hover:from-cyan-400 hover:to-emerald-400 text-white font-semibold text-sm shadow-lg shadow-cyan-500/25 transition-all">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-cardBg border-t border-slate-200 dark:border-cardBorder py-8 transition-colors duration-300 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-sm text-slate-500 dark:text-slate-400 space-y-4 sm:space-y-0">
+            <p data-i18n="footerCopy">&copy; 2026 Lucas de Camargo Silva Saiani. All rights reserved.</p>
+            <div class="flex space-x-6">
+                <a href="#about" data-i18n="navAbout" class="hover:text-cyan-500 transition-colors">About</a>
+                <a href="#skills" data-i18n="navSkills" class="hover:text-cyan-500 transition-colors">Skills</a>
+                <a href="#experience" data-i18n="navExperience" class="hover:text-cyan-500 transition-colors">Experience</a>
+                <a href="#contact" data-i18n="navContact" class="hover:text-cyan-500 transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic & Translations -->
+    <script>
+        // Translation Dictionaries (EN / PT-BR)
+        const i18n = {
+            en: {
+                heroSubRole: "Full Stack Software Developer",
+                navAbout: "About",
+                navSkills: "Skills",
+                navExperience: "Experience",
+                navEducation: "Education",
+                navLanguages: "Languages",
+                navContact: "Contact",
+                btnResume: "Resume",
+                heroBadge: "Open for Remote, Hybrid & On-site Roles (Part-Time)",
+                heroGreeting: "Hi, I'm",
+                heroTitle: "Full Stack Software Developer",
+                heroBio: "Experienced Full Stack Developer with strong expertise in building scalable backend services with C# .NET and modern web interfaces with Angular. Computer Engineer and MBA graduate currently based in Sydney, Australia.",
+                heroLoc: "Sydney, Australia",
+                heroVisa: "Student Visa (Part-Time Work Rights)",
+                heroBtnExperience: "View Experience",
+                heroBtnContact: "Get in Touch",
+                codeStatus: "Status: Available for Opportunities",
+                aboutHeader: "Professional Summary",
+                aboutTitle: "Full Stack Expertise & Clean Architecture",
+                aboutSub: "Computer Engineer and MBA graduate with extensive experience developing full-stack web applications, business logic in C# .NET, interactive Angular interfaces, and optimized database solutions.",
+                aboutPillar1Title: "Backend Engineering",
+                aboutPillar1Desc: "Proficient in constructing high-speed RESTful Web APIs, microservices, and Entity Framework ORM data layers in C# .NET.",
+                aboutPillar2Title: "Angular Frontend",
+                aboutPillar2Desc: "Designing modular single-page web applications with Angular, TypeScript, RxJS, state management, and modern CSS frameworks.",
+                aboutPillar3Title: "Computer Engineer & MBA",
+                aboutPillar3Desc: "Strong technical foundation combining rigorous engineering principles with post-graduate specialization in Full Stack Development.",
+                skillsHeader: "Technical Stack",
+                skillsTitle: "Core Competencies",
+                skillsSub: "A clean breakdown of technologies, frameworks, databases, and development practices I utilize.",
+                skillCatBackend: "Backend (C# & .NET)",
+                skillCatFrontend: "Frontend (Angular)",
+                skillCatDatabase: "Databases & Tools",
+                badgePrimary: "Primary Stack",
+                badgeCore: "Core Stack",
+                badgeDevOps: "Tools & Practice",
+                expHeader: "Career History",
+                expTitle: "Professional Experience",
+                expSub: "Hands-on track record as a software developer analyst and full stack developer across established tech companies.",
+                expRole1: "Mid-Level Developer Analyst (Analista de Desenvolvimento Pl)",
+                expDate1: "Jun 2024 - Feb 2026",
+                expPoint1_1: "Developed and maintained scalable RESTful Web APIs using C# .NET Core and Entity Framework.",
+                expPoint1_2: "Engineered responsive, modular frontend features in Angular, integrated with backend services.",
+                expPoint1_3: "Optimized database queries and stored procedures in SQL Server/PostgreSQL to enhance performance.",
+                expPoint1_4: "Participated in Agile/Scrum ceremonies, code reviews, and continuous deployment tasks using Azure DevOps.",
+                expRole2: "Mid-Level Developer Analyst (Analista de Desenvolvimento Pl)",
+                expDate2: "Jul 2023 - Feb 2024",
+                expPoint2_1: "Built robust web applications implementing business rules in C# .NET and modern frontend solutions.",
+                expPoint2_2: "Designed UI components in Angular, leveraging TypeScript and RxJS for smooth user experience.",
+                expPoint2_3: "Collaborated on database modeling, schema updates, and REST API integration testing.",
+                expRole3: "Full Stack Developer",
+                expDate3: "Jan 2020 - Jul 2023",
+                expPoint3_1: "Delivered full-stack software solutions for client projects, handling backend C# logic and frontend web interfaces.",
+                expPoint3_2: "Built web services and database integrations, maintaining clean code standards and unit test coverage.",
+                expPoint3_3: "Worked closely with product owners and developers to deliver custom client features on schedule.",
+                eduHeader: "Education & Qualifications",
+                eduTitle: "Academic Degrees",
+                eduSub: "Solid engineering foundation complemented by postgraduate full-stack development specialization.",
+                eduDegreeBadge1: "Bachelor's Degree",
+                eduDegree1Title: "Computer Engineering",
+                eduDegree1Desc: "Rigorous engineering program covering software architecture, computer systems, algorithms, object-oriented design, and database administration.",
+                eduDegreeBadge2: "Postgraduate / MBA",
+                eduDegree2Title: "MBA Full Stack Developer",
+                eduDegree2Desc: "Specialized program in full-stack architecture, microservices, cloud applications, modern web frameworks, and DevOps pipelines.",
+                eduDegreeBadge3: "Language Course",
+                eduDegree3Title: "General English Program",
+                eduDegree3Desc: "Completed Upper Intermediate English level in Sydney, Australia, strengthening professional and conversational communication skills.",
+                langHeader: "Communication",
+                langTitle: "Languages",
+                langSub: "Language proficiency for international and multicultural teamwork.",
+                langPt: "Portuguese",
+                langPtProf: "Native Speaker",
+                langPtBadge: "Native",
+                langEn: "English",
+                langEnProf: "Finished Upper Intermediate (ELSIS)",
+                langEnBadge: "Upper Intermediate",
+                contactHeader: "Get In Touch",
+                contactTitle: "Let's Connect",
+                contactSub: "Looking for a Full Stack Software Developer in Sydney or for remote projects? Send a message directly!",
+                contactInfoTitle: "Contact Details",
+                contactEmailLabel: "Email",
+                contactPhoneLabel: "Phone / WhatsApp",
+                contactLocLabel: "Location",
+                contactLocValue: "Sydney, Australia",
+                contactVisaLabel: "Work Rights",
+                contactVisaValue: "Student Visa (Part-Time)",
+                formLabelName: "Your Name",
+                formLabelEmail: "Your Email",
+                formLabelSubject: "Subject",
+                formLabelMessage: "Message",
+                formBtnSend: "Send Message",
+                footerCopy: "© 2026 Lucas de Camargo Silva Saiani. All rights reserved.",
+                formSuccessMsg: "Thank you, {name}! Your message has been sent successfully."
+            },
+            pt: {
+                heroSubRole: "Desenvolvedor de Software Full Stack",
+                navAbout: "Sobre",
+                navSkills: "Habilidades",
+                navExperience: "Experiência",
+                navEducation: "Formação",
+                navLanguages: "Idiomas",
+                navContact: "Contato",
+                btnResume: "Currículo",
+                heroBadge: "Disponível para Remoto, Híbrido e Presencial (Part-Time)",
+                heroGreeting: "Olá, sou",
+                heroTitle: "Desenvolvedor de Software Full Stack",
+                heroBio: "Desenvolvedor Full Stack experiente na criação de serviços backend escaláveis com C# .NET e interfaces web dinâmicas com Angular. Engenheiro de Computação e pós-graduado em MBA, atualmente residindo em Sydney, Austrália.",
+                heroLoc: "Sydney, Austrália",
+                heroVisa: "Visto de Estudante (Direito a Trabalho Part-Time)",
+                heroBtnExperience: "Ver Experiência",
+                heroBtnContact: "Entrar em Contato",
+                codeStatus: "Status: Disponível para Oportunidades",
+                aboutHeader: "Resumo Profissional",
+                aboutTitle: "Domínio Full Stack & Arquitetura Limpa",
+                aboutSub: "Engenheiro de Computação e pós-graduado em MBA com vasta experiência no desenvolvimento de aplicações web full-stack, regras de negócio em C# .NET, interfaces interativas em Angular e banco de dados otimizados.",
+                aboutPillar1Title: "Engenharia Backend",
+                aboutPillar1Desc: "Proficiência na construção de APIs RESTful de alta velocidade, microsserviços e camada de dados com Entity Framework ORM em C# .NET.",
+                aboutPillar2Title: "Frontend Angular",
+                aboutPillar2Desc: "Desenvolvimento de aplicações web dinâmicas em Angular, TypeScript, RxJS, gerenciamento de estado e estilização moderna.",
+                aboutPillar3Title: "Engenheiro & MBA",
+                aboutPillar3Desc: "Forte base técnica combinando engenharia rigorosa de computação com especialização em Desenvolvimento Full Stack.",
+                skillsHeader: "Stack Técnica",
+                skillsTitle: "Principais Competências",
+                skillsSub: "Detalhamento organizado das tecnologias, frameworks, bancos de dados e práticas de desenvolvimento utilizadas.",
+                skillCatBackend: "Backend (C# & .NET)",
+                skillCatFrontend: "Frontend (Angular)",
+                skillCatDatabase: "Bancos de Dados & Ferramentas",
+                badgePrimary: "Stack Principal",
+                badgeCore: "Core Stack",
+                badgeDevOps: "Ferramentas & Práticas",
+                expHeader: "Histórico Profissional",
+                expTitle: "Experiência Profissional",
+                expSub: "Trajetória comprovada como analista de desenvolvimento e desenvolvedor full stack em empresas de tecnologia.",
+                expRole1: "Analista de Desenvolvimento Pleno",
+                expDate1: "Jun 2024 - Fev 2026",
+                expPoint1_1: "Desenvolveu e manteve APIs Web RESTful escaláveis utilizando C# .NET Core e Entity Framework.",
+                expPoint1_2: "Construiu funcionalidades frontend responsivas em Angular integradas aos serviços de backend.",
+                expPoint1_3: "Otimizou consultas de banco de dados e stored procedures em SQL Server/PostgreSQL para aumentar a performance.",
+                expPoint1_4: "Participou de rotinas ágeis (Scrum), revisões de código e implantação contínua via Azure DevOps.",
+                expRole2: "Analista de Desenvolvimento Pleno",
+                expDate2: "Jul 2023 - Fev 2024",
+                expPoint2_1: "Desenvolveu aplicações web robustas implementando regras de negócio em C# .NET e frontend moderno.",
+                expPoint2_2: "Criou componentes de interface em Angular utilizando TypeScript e RxJS para excelente experiência do usuário.",
+                expPoint2_3: "Colaborou com modelagem de banco de dados, atualização de schemas e testes de integração de APIs.",
+                expRole3: "Desenvolvedor Full Stack",
+                expDate3: "Jan 2020 - Jul 2023",
+                expPoint3_1: "Entregou soluções de software full-stack para clientes, atuando com lógica em C# e interfaces web.",
+                expPoint3_2: "Construiu serviços web e integrações de banco de dados, mantendo padrões de código limpo e testes unitários.",
+                expPoint3_3: "Trabalhou em conjunto com gestores de produto e desenvolvedores para entregar funcionalidades no prazo.",
+                eduHeader: "Formação & Qualificações",
+                eduTitle: "Graus Acadêmicos",
+                eduSub: "Forte base em engenharia complementada por pós-graduação em desenvolvimento full stack.",
+                eduDegreeBadge1: "Graduação / Bacharelado",
+                eduDegree1Title: "Engenharia da Computação",
+                eduDegree1Desc: "Programa rigoroso cobrindo arquitetura de software, sistemas computacionais, algoritmos, orientação a objetos e bancos de dados.",
+                eduDegreeBadge2: "Pós-Graduação / MBA",
+                eduDegree2Title: "MBA Full Stack Developer",
+                eduDegree2Desc: "Programa especializado em arquitetura full-stack, microsserviços, aplicações em nuvem e esteiras DevOps.",
+                eduDegreeBadge3: "Curso de Idioma",
+                eduDegree3Title: "General English Program",
+                eduDegree3Desc: "Conclusão do nível Pós-Intermediário (Upper Intermediate) em Sydney, Austrália, aprimorando a comunicação no mercado global.",
+                langHeader: "Comunicação",
+                langTitle: "Idiomas",
+                langSub: "Proficiência linguística para equipes internacionais e multidisciplinares.",
+                langPt: "Português",
+                langPtProf: "Língua Materna",
+                langPtBadge: "Nativo",
+                langEn: "Inglês",
+                langEnProf: "Concluído Upper Intermediate (ELSIS)",
+                langEnBadge: "Pós-Intermediário",
+                contactHeader: "Contato",
+                contactTitle: "Vamos Conversar",
+                contactSub: "Procurando um Desenvolvedor Full Stack em Sydney ou para projetos remotos? Envie uma mensagem!",
+                contactInfoTitle: "Detalhes de Contato",
+                contactEmailLabel: "E-mail",
+                contactPhoneLabel: "Telefone / WhatsApp",
+                contactLocLabel: "Localização",
+                contactLocValue: "Sydney, Austrália",
+                contactVisaLabel: "Direito de Trabalho",
+                contactVisaValue: "Visto de Estudante (Part-Time)",
+                formLabelName: "Seu Nome",
+                formLabelEmail: "Seu E-mail",
+                formLabelSubject: "Assunto",
+                formLabelMessage: "Mensagem",
+                formBtnSend: "Enviar Mensagem",
+                footerCopy: "© 2026 Lucas de Camargo Silva Saiani. Todos os direitos reservados.",
+                formSuccessMsg: "Obrigado, {name}! Sua mensagem foi enviada com sucesso."
+            }
+        };
+
+        // Current Language State ('en' or 'pt')
+        let currentLang = 'en';
+
+        // Toggle Language Function
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'pt' : 'en';
+            updateLanguageUI();
+        }
+
+        // Apply Translations
+        function updateLanguageUI() {
+            const langFlag = document.getElementById('langFlag');
+            const langText = document.getElementById('langText');
+
+            if (currentLang === 'pt') {
+                langFlag.textContent = '🇺🇸';
+                langText.textContent = 'EN';
+            } else {
+                langFlag.textContent = '🇧🇷';
+                langText.textContent = 'PT-BR';
+            }
+
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang] && i18n[currentLang][key]) {
+                    el.textContent = i18n[currentLang][key];
+                }
+            });
+        }
+
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+        });
+
+        // Mobile Menu Toggle Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Print / Save PDF Resume Function
+        function downloadResume() {
+            window.print();
+        }
+
+        // Contact Form Submission Handler
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const formMessage = document.getElementById('formMessage');
+            
+            const successTemplate = i18n[currentLang].formSuccessMsg;
+            formMessage.textContent = successTemplate.replace('{name}', name);
+            formMessage.className = 'p-4 rounded-xl text-sm font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 block';
+            
+            document.getElementById('contactForm').reset();
+            
+            setTimeout(() => {
+                formMessage.classList.add('hidden');
+            }, 6000);
+        }
+    </script>
+</body>
+</html>
